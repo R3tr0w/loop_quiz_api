@@ -1,0 +1,24 @@
+version: "2.1"
+
+orbs:
+  node: circleci/node@4.7.0
+
+jobs:
+  build-and-test:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - checkout
+      - node/install:
+          node-version: 16.14.0
+          install-yarn: true
+      - node/install-packages:
+          pkg-manager: yarn
+          cache-path: ~/project/node_modules
+          override-ci-command: yarn install
+      - run: yarn run test
+
+workflows:
+  main:
+    jobs:
+      - build-and-test
